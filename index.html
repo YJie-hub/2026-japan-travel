@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 熊本-福岡-廣島 / Kumamoto - Fukuoka - Hiroshima</title>
+    
+    <!-- 引入 jf-openhuninn 粉圓體 -->
+    <style>
+        @font-face {
+            font-family: 'jf-openhuninn';
+            src: url('https://cdn.jsdelivr.net/gh/justfont/open-huninn-font@master/font/jf-openhuninn-2.0.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+    </style>
+    <!-- 法文補充字型 -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,600;0,800;1,600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        washi: '#FFFCF6',     // 和紙白
+                        ink: '#3E3A39',       // 墨灰
+                        coral: '#F2A497',     // 珊瑚粉
+                        yamabuki: '#F6D27A',  // 山吹黃
+                        water: '#A8D3E6',     // 水色
+                        wakatake: '#B9DAA5'   // 若竹綠
+                    },
+                    fontFamily: {
+                        sans: ['"jf-openhuninn"', '"Nunito"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* 基礎設定 */
+        body {
+            background-color: #FFFCF6;
+            color: #3E3A39;
+            -ms-overflow-style: none;  
+            scrollbar-width: none;  
+            scroll-behavior: smooth;
+        }
+        body::-webkit-scrollbar { display: none; }
+
+        /* 繪本風格外框與陰影 */
+        .pic-border {
+            border: 3px solid #3E3A39;
+            border-radius: 20px;
+        }
+        .pic-border-sm {
+            border: 3px solid #3E3A39;
+            border-radius: 12px;
+        }
+        .pic-shadow {
+            box-shadow: 4px 4px 0px #3E3A39;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .pic-btn:active {
+            box-shadow: 0px 0px 0px #3E3A39 !important;
+            transform: translate(4px, 4px) !important;
+        }
+
+        /* 雙語標籤樣式 */
+        .lang-fr {
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.9em;
+            opacity: 0.85;
+            font-style: italic;
+            display: block;
+            margin-top: 4px;
+        }
+
+        /* 時間軸線條 */
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            top: 36px;
+            bottom: -36px;
+            left: 25px; /* 置中於左側圓球 */
+            width: 3px;
+            background-color: #3E3A39;
+            z-index: 0;
+        }
+        .timeline-item:last-child .timeline-line::before {
+            display: none;
+        }
+
+        /* Checkbox 自訂 */
+        .pic-checkbox {
+            appearance: none;
+            width: 32px;
+            height: 32px;
+            border: 3px solid #3E3A39;
+            border-radius: 10px;
+            background-color: #FFFCF6;
+            position: relative;
+            cursor: pointer;
+            flex-shrink: 0;
+            box-shadow: 2px 2px 0px #3E3A39;
+            transition: all 0.1s ease;
+        }
+        .pic-checkbox:checked {
+            background-color: #B9DAA5; 
+        }
+        .pic-checkbox:checked::after {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 10px;
+            width: 8px;
+            height: 16px;
+            border: solid #3E3A39;
+            border-width: 0 3px 3px 0;
+            transform: rotate(45deg);
+        }
+
+        /* 動畫 */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        @keyframes bounceIn {
+            0% { transform: scale(0.95) translateY(15px); opacity: 0; }
+            60% { transform: scale(1.02) translateY(-3px); opacity: 1; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        .animate-bounce-in {
+            animation: bounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        /* 無障礙：減少動態效果 */
+        @media (prefers-reduced-motion: reduce) {
+            .animate-float, .animate-bounce-in {
+                animation: none !important;
+                transition: none !important;
+                opacity: 1 !important;
+                transform: none !important;
+            }
+            .pic-btn:active {
+                box-shadow: 4px 4px 0px #3E3A39 !important;
+                transform: none !important;
+            }
+        }
+        
+        .content-block {
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body class="bg-washi font-sans antialiased text-ink mb-24">
+
+    <!-- 頂端導覽列 (雙語) -->
+    <header class="fixed top-0 w-full bg-washi border-b-3 border-ink z-50 shadow-[0_4px_0px_#3E3A39]">
+        <nav class="flex overflow-x-auto gap-4 px-4 py-3 snap-x no-scrollbar justify-between sm:justify-center items-center font-bold whitespace-nowrap text-sm sm:text-base">
+            <a href="#hero" class="snap-start hover:text-coral transition-colors flex flex-col items-center">首頁<span class="text-[10px] lang-fr mt-0">Accueil</span></a>
+            <a href="#flights" class="snap-start hover:text-coral transition-colors flex flex-col items-center">航班<span class="text-[10px] lang-fr mt-0">Vols</span></a>
+            <a href="#hotels" class="snap-start hover:text-coral transition-colors flex flex-col items-center">住宿<span class="text-[10px] lang-fr mt-0">Hôtels</span></a>
+            <a href="#prep" class="snap-start hover:text-coral transition-colors flex flex-col items-center">準備<span class="text-[10px] lang-fr mt-0">Prépa</span></a>
+            <a href="#itinerary" class="snap-start hover:text-coral transition-colors flex flex-col items-center">行程<span class="text-[10px] lang-fr mt-0">Itinéraire</span></a>
+        </nav>
+    </header>
+
+    <main class="pt-24 px-5 max-w-2xl mx-auto">
+        
+        <!-- 首頁區塊 -->
+        <section id="hero" class="mt-4 mb-12 text-center relative">
+            <div class="flex justify-center mb-6 relative">
+                <!-- SVG: 富士山與新幹線與楓葉 -->
+                <svg viewBox="0 0 240 140" class="w-64 h-auto animate-float" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- 雲朵 -->
+                    <path d="M30 60 C30 50 50 50 55 60 C65 55 75 65 70 75 L25 75 C15 70 20 60 30 60 Z" fill="#FFFCF6" stroke="#3E3A39" stroke-width="4" stroke-linejoin="round"/>
+                    <path d="M190 40 C190 30 210 30 215 40 C225 35 235 45 230 55 L185 55 C175 50 180 40 190 40 Z" fill="#FFFCF6" stroke="#3E3A39" stroke-width="4" stroke-linejoin="round"/>
+                    <!-- 太陽 -->
+                    <circle cx="120" cy="50" r="25" fill="#F2A497" stroke="#3E3A39" stroke-width="4"/>
+                    <!-- 鳥居 -->
+                    <rect x="90" y="70" width="10" height="40" rx="3" fill="#F2A497" stroke="#3E3A39" stroke-width="4"/>
+                    <rect x="140" y="70" width="10" height="40" rx="3" fill="#F2A497" stroke="#3E3A39" stroke-width="4"/>
+                    <rect x="80" y="75" width="80" height="10" rx="3" fill="#F2A497" stroke="#3E3A39" stroke-width="4"/>
+                    <path d="M75 65 C100 60 140 60 165 65" stroke="#3E3A39" stroke-width="10" stroke-linecap="round"/>
+                    <path d="M75 65 C100 60 140 60 165 65" stroke="#F2A497" stroke-width="4" stroke-linecap="round"/>
+                    <!-- 新幹線 -->
+                    <rect x="40" y="100" width="160" height="25" rx="10" fill="#FFFCF6" stroke="#3E3A39" stroke-width="4"/>
+                    <rect x="55" y="105" width="20" height="10" rx="2" fill="#A8D3E6" stroke="#3E3A39" stroke-width="3"/>
+                    <rect x="85" y="105" width="20" height="10" rx="2" fill="#A8D3E6" stroke="#3E3A39" stroke-width="3"/>
+                    <rect x="115" y="105" width="20" height="10" rx="2" fill="#A8D3E6" stroke="#3E3A39" stroke-width="3"/>
+                    <rect x="145" y="105" width="20" height="10" rx="2" fill="#A8D3E6" stroke="#3E3A39" stroke-width="3"/>
+                    <path d="M40 115 L200 115" stroke="#A8D3E6" stroke-width="3"/>
+                    <!-- 楓葉裝飾 (點綴) -->
+                    <path d="M20 100 Q30 90 25 110 Z" fill="#F6D27A" stroke="#3E3A39" stroke-width="2"/>
+                    <path d="M210 90 Q220 100 205 105 Z" fill="#F2A497" stroke="#3E3A39" stroke-width="2"/>
+                </svg>
+            </div>
+            
+            <h1 class="text-3xl font-extrabold mb-1">2026 熊本-福岡-廣島</h1>
+            <h2 class="text-lg lang-fr mb-6 font-bold">Kumamoto - Fukuoka - Hiroshima</h2>
+            
+            <div class="pic-border pic-shadow bg-yamabuki py-4 px-8 inline-block mx-auto transform -rotate-1">
+                <p class="text-sm font-bold mb-1">出發倒數 / <span class="lang-fr !inline mt-0">Départ dans</span></p>
+                <div id="countdown" class="text-2xl font-black tracking-wider">00 天 00 小時</div>
+            </div>
+        </section>
+
+        <!-- 航班卡片 -->
+        <section id="flights" class="mb-14 scroll-mt-24">
+            <h3 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                ✈️ <div>航班資訊 <span class="lang-fr text-sm block">Informations sur les vols</span></div>
+            </h3>
+            <div class="flex flex-col gap-5">
+                <div class="pic-border pic-shadow bg-water p-5 relative overflow-hidden flex flex-col justify-center min-h-[130px]">
+                    <div class="flex justify-between items-center relative z-10">
+                        <div>
+                            <p class="text-[12px] font-bold bg-washi pic-border-sm px-2 py-0.5 inline-block mb-2">去程 11/23 (一) / Aller</p>
+                            <p class="text-3xl font-black">17:30</p>
+                            <p class="lang-fr text-sm font-bold">Arrivée (抵達)</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-2xl font-black">熊本</p>
+                            <p class="lang-fr text-sm font-bold">Aéroport de Kumamoto</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="pic-border pic-shadow bg-coral p-5 relative overflow-hidden flex flex-col justify-center min-h-[130px]">
+                    <div class="flex justify-between items-center relative z-10">
+                        <div>
+                            <p class="text-[12px] font-bold bg-washi pic-border-sm px-2 py-0.5 inline-block mb-2">回程 12/5 (四) CI113 / Retour</p>
+                            <p class="text-3xl font-black">11:50</p>
+                            <p class="lang-fr text-sm font-bold">Départ (起飛)</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-2xl font-black">廣島機場</p>
+                            <p class="lang-fr text-sm font-bold">Aéroport de Hiroshima</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 住宿資訊 -->
+        <section id="hotels" class="mb-14 scroll-mt-24">
+            <h3 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                🏨 <div>住宿安排 <span class="lang-fr text-sm block">Hébergements</span></div>
+            </h3>
+            <div class="flex flex-col gap-6">
+                <!-- 熊本 -->
+                <div class="pic-border pic-shadow bg-washi p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+                    <div class="w-14 h-14 bg-yamabuki pic-border rounded-full flex items-center justify-center flex-shrink-0 text-2xl">🐻</div>
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2 mb-1">
+                            <p class="font-black text-xl">熊本 <span class="text-base font-normal lang-fr !inline mt-0">Kumamoto</span></p>
+                            <p class="text-xs font-bold bg-ink text-washi px-2 py-1 rounded-md">11/23 - 11/27</p>
+                        </div>
+                        <p class="font-black text-lg text-coral">THE BLOSSOM KUMAMOTO</p>
+                    </div>
+                </div>
+                <!-- 福岡 -->
+                <div class="pic-border pic-shadow bg-washi p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+                    <div class="w-14 h-14 bg-water pic-border rounded-full flex items-center justify-center flex-shrink-0 text-2xl">🍜</div>
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2 mb-1">
+                            <p class="font-black text-xl">福岡 <span class="text-base font-normal lang-fr !inline mt-0">Fukuoka</span></p>
+                            <p class="text-xs font-bold bg-ink text-washi px-2 py-1 rounded-md">11/27 - 12/2</p>
+                        </div>
+                        <p class="font-black text-lg text-coral">Mitsui Garden Hotel Fukuoka Gion</p>
+                    </div>
+                </div>
+                <!-- 廣島 -->
+                <div class="pic-border pic-shadow bg-washi p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+                    <div class="w-14 h-14 bg-wakatake pic-border rounded-full flex items-center justify-center flex-shrink-0 text-2xl">🍁</div>
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2 mb-1">
+                            <p class="font-black text-xl">廣島 <span class="text-base font-normal lang-fr !inline mt-0">Hiroshima</span></p>
+                            <p class="text-xs font-bold bg-ink text-washi px-2 py-1 rounded-md">12/2 - 12/5</p>
+                        </div>
+                        <p class="font-black text-lg text-coral">RIHGA Royal Hotel Hiroshima</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 準備清單 -->
+        <section id="prep" class="mb-14 scroll-mt-24">
+            <h3 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                📝 <div>出發前準備 <span class="lang-fr text-sm block">Liste de préparation</span></div>
+            </h3>
+            <div class="pic-border pic-shadow bg-washi p-6">
+                <ul class="flex flex-col gap-6">
+                    <li class="flex items-start gap-4">
+                        <input type="checkbox" class="pic-checkbox">
+                        <div class="flex flex-col justify-center mt-[-4px]">
+                            <span class="font-bold text-lg leading-tight">護照 (確認效期大於六個月)</span>
+                            <span class="lang-fr mt-1 text-sm">Passeport (Validité > 6 mois)</span>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-4">
+                        <input type="checkbox" class="pic-checkbox" checked>
+                        <div class="flex flex-col justify-center mt-[-4px]">
+                            <span class="font-bold text-lg leading-tight">單買區間車票 ＋ 預約 JR 北九州鐵路周遊券 5 日券 (15,000 JPY)</span>
+                            <span class="lang-fr mt-1 text-sm">Billets simples + JR Pass Kyushu Nord 5 jours (15 000 JPY)</span>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-4">
+                        <input type="checkbox" class="pic-checkbox">
+                        <div class="flex flex-col justify-center mt-[-4px]">
+                            <span class="font-bold text-lg leading-tight">Visit Japan Web 線上填寫</span>
+                            <span class="lang-fr mt-1 text-sm">Remplir le formulaire Visit Japan Web en ligne</span>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-4">
+                        <input type="checkbox" class="pic-checkbox">
+                        <div class="flex flex-col justify-center mt-[-4px]">
+                            <span class="font-bold text-lg leading-tight">提前上網劃位：阿蘇男孩！/ 九州橫斷特急 / 由布院之森</span>
+                            <span class="lang-fr mt-1 text-sm">Réserver en ligne : Aso Boy! / Kyushu Odan / Yufuin no Mori</span>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-4">
+                        <input type="checkbox" class="pic-checkbox">
+                        <div class="flex flex-col justify-center mt-[-4px]">
+                            <span class="font-bold text-lg leading-tight">iPhone 綁定 Suica / ICOCA (確認餘額充足)</span>
+                            <span class="lang-fr mt-1 text-sm">Lier Suica / ICOCA sur iPhone (Vérifier le solde)</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 每日行程 Tabs -->
+        <section id="itinerary" class="mb-14 scroll-mt-24">
+            <h3 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                🎒 <div>詳細行程表 <span class="lang-fr text-sm block">Itinéraire détaillé</span></div>
+            </h3>
+            
+            <!-- Tab 按鈕區 (水平捲動) -->
+            <div id="tab-container" class="flex overflow-x-auto gap-3 pb-4 mb-2 -mx-5 px-5 snap-x no-scrollbar">
+                <!-- 由 JS 動態生成 -->
+            </div>
+
+            <!-- 時間軸內容區塊 -->
+            <div id="itinerary-content" class="min-h-[500px] mt-4">
+                <!-- 內容由 JS 動態生成 -->
+            </div>
+        </section>
+
+        <!-- 頁尾可愛插圖 -->
+        <div class="flex justify-center pb-12">
+            <svg viewBox="0 0 140 80" class="w-36 h-36 animate-float" style="animation-delay: 1s;" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- 復古巴士 -->
+                <rect x="20" y="30" width="100" height="35" rx="8" fill="#B9DAA5" stroke="#3E3A39" stroke-width="4"/>
+                <rect x="30" y="35" width="20" height="15" rx="4" fill="#FFFCF6" stroke="#3E3A39" stroke-width="4"/>
+                <rect x="60" y="35" width="20" height="15" rx="4" fill="#FFFCF6" stroke="#3E3A39" stroke-width="4"/>
+                <rect x="90" y="35" width="20" height="15" rx="4" fill="#FFFCF6" stroke="#3E3A39" stroke-width="4"/>
+                <circle cx="45" cy="65" r="8" fill="#3E3A39"/>
+                <circle cx="95" cy="65" r="8" fill="#3E3A39"/>
+                <path d="M10 75 L130 75" stroke="#3E3A39" stroke-width="4" stroke-linecap="round"/>
+            </svg>
+        </div>
+    </main>
+
+    <!-- 巨量資料庫與邏輯腳本 -->
+    <script>
+        // 倒數計時器
+        const targetDate = new Date("2026-11-23T00:00:00").getTime();
+        const countdownEl = document.getElementById("countdown");
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance < 0) {
+                countdownEl.innerHTML = "旅途愉快！<br><span class='lang-fr text-lg mt-1 font-bold'>Bon voyage !</span>";
+                return;
+            }
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            countdownEl.innerHTML = `${days} 天 <span class='lang-fr !inline text-lg'>Jours</span> ${hours} 時 <span class='lang-fr !inline text-lg'>H</span>`;
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // 完整雙語行程資料字典 (100% 原始細節保留)
+        const itineraryData = {
+            "11/23 (一)": {
+                theme: "熊本初見面 | Première rencontre avec Kumamoto",
+                notes: [
+                    { title: "【交通與票券 / Transports et Billets】", content: "搭乘「阿蘇熊本機場利木津巴士」直達熊本站前（車程約 60 分鐘）。\n<span class='lang-fr'>Prendre le 'Limousine Bus de l'Aéroport Aso Kumamoto' directement jusqu'à la gare de Kumamoto (environ 60 min).</span>" },
+                    { title: "【單人預估車資 / Tarif estimé par personne】", content: "1,000 JPY（上車抽整理券、下車付現或刷 IC 卡）。\n<span class='lang-fr'>1 000 JPY (Prendre un ticket numéroté en montant, payer en espèces ou par carte IC en descendant).</span>" }
+                ],
+                events: [
+                    { time: "17:30", title: "抵達熊本", fr: "Arrivée à Kumamoto", desc: "搭車前往市區飯店 (THE BLOSSOM KUMAMOTO) 放行李。", frDesc: "Prendre le bus pour l'hôtel en ville (THE BLOSSOM KUMAMOTO) et déposer les bagages.", transport: "利木津巴士 | Bus Limousine", color: "bg-wakatake" },
+                    { time: "19:00", title: "上下通商店街與晚餐", fr: "Shopping et Dîner à Shimotori", desc: "晚上至上下通商店街逛街與晚餐（推薦：勝烈亭豬排、黑亭熊本拉麵）。", frDesc: "Le soir, faire du shopping et dîner dans la rue commerçante de Shimotori (Recommandé : Tonkatsu Katsuretsutei, Ramen Kurotei).", transport: "步行 | Marche", color: "bg-yamabuki" }
+                ]
+            },
+            "11/24 (二)": {
+                theme: "壯闊阿蘇 | La Majesté d'Aso",
+                notes: [
+                    { title: "【交通與票券 / Transports et Billets】", content: "熊本至阿蘇搭乘「JR 九州特急列車（阿蘇男孩！或九州橫斷特急，強烈建議提前劃位）」；阿蘇當地轉乘「產交巴士阿蘇火口線」。這天單買車票最划算。\n<span class='lang-fr'>Kumamoto à Aso : 'Train Express JR Kyushu (Aso Boy! ou Kyushu Odan, réservation fortement conseillée)' ; À Aso : 'Bus Sanko Ligne Cratère Aso'. Les billets à l'unité sont les plus rentables ce jour-là.</span>" },
+                    { title: "【單人預估車資 / Tarif estimé par personne】", content: "JR 特急來回 5,040 JPY ＋ 阿蘇火口線巴士約 1,300 JPY ＝ 約 6,340 JPY。\n<span class='lang-fr'>Express JR aller-retour 5 040 JPY + Bus Ligne Cratère Aso env. 1 300 JPY = env. 6 340 JPY.</span>" }
+                ],
+                events: [
+                    { time: "08:15", title: "熊本車站出發", fr: "Départ de la gare de Kumamoto", desc: "從飯店退房或離開，步行至 JR 熊本車站。在站內的超商買杯熱咖啡或輕食早餐。", frDesc: "Quitter l'hôtel, marcher jusqu'à la gare JR de Kumamoto. Acheter un café chaud ou un petit-déjeuner léger à la supérette de la gare." },
+                    { time: "08:35", title: "JR 特急鐵道之旅", fr: "Voyage en Train Express JR", desc: "搭乘 特急「九州橫斷特急 2 號」（別府方向）直達阿蘇站。\n💡 Concierge 窗景提示：火車行駛約 40 分鐘過「立野站」後，會經歷特殊的「Z字型折返式鐵道（Switchback）」，火車會倒著開再往前開以爬升高度，窗外阿蘇外輪山的山谷秋景非常壯麗，記得別睡著了！", frDesc: "Prendre l'Express 'Kyushu Odan No.2' (direction Beppu) direct pour Aso.\n💡 Conseil Concierge pour la vue : Après 40 min de trajet passé 'Tateno', le train fera un 'Switchback en Z' (marche arrière puis avant pour grimper). La vue automnale sur la vallée de la caldeira d'Aso est magnifique, ne dormez pas !", transport: "JR 特急 | Express JR", color: "bg-water" },
+                    { time: "09:44", title: "阿蘇站前：騙人布銅像 ＆ 產地市集", fr: "Gare d'Aso : Statue d'Usopp & Marché local", desc: "出站後，先到站前廣場找《航海王》的騙人布銅像拍照。接著進去隔壁的 ASO田園空間博物館（農產直銷所）。11月的阿蘇早晨很冷，進去買瓶濃郁的熱阿蘇牛奶或手工布丁。\n⚠️ 重要提早準備：在巴士站牌前的自動售票機，先買好往返草千里的巴士車票（或確保交通系 IC 卡餘額充足）。", frDesc: "Prendre en photo la statue d'Usopp (One Piece). Visiter le musée de l'espace rural ASO à côté. Il fait froid en novembre, achetez du lait chaud d'Aso ou un pudding artisanal.\n⚠️ Préparation importante : Achetez les billets de bus aller-retour pour Kusasenri aux distributeurs (ou vérifiez le solde de la carte IC)." },
+                    { time: "11:15", title: "產交巴士：阿蘇登山線", fr: "Bus Sanko : Ligne Mont Aso", desc: "搭乘往「阿蘇山上ターミナル」方向的巴士。\n💡 Concierge 窗景提示：巴士上山約 15 分鐘後，右手邊會出現完美的火山錐「米塚」。11 月底的米塚會從抹茶布丁變成「金黃色布丁」，非常可愛，記得相機先準備好。", frDesc: "Prendre le bus direction 'Aso Sanjo Terminal'.\n💡 Conseil Concierge : Après 15 min de montée, le cône volcanique parfait 'Komezuka' apparaîtra à droite. Fin novembre, il passe du vert matcha au 'pudding doré', préparez vos appareils photo !", transport: "巴士 | Bus", color: "bg-wakatake" },
+                    { time: "11:41", title: "草千里之濱：深秋大草原、赤牛丼、騎馬", fr: "Kusasenri-ga-hama : Prairie d'automne, Bœuf Akaushi, Cheval", desc: "11:45 抵達後，直接前往餐廳享用暖呼呼的阿蘇赤牛丼。\n13:00 在金黃色的無邊際大草原漫步。若天氣允許，一定要衝一波深秋限定的騎馬體驗。\n14:00 氣溫下降時，躲進「草千里珈琲焙煎所」喝杯熱拿鐵，或到「阿蘇火山博物館」吹暖氣參觀。", frDesc: "11h45 : Déjeuner chaud (Bol de bœuf Akaushi).\n13h00 : Promenade dans la prairie dorée sans fin. Si le temps le permet, faites une balade à cheval d'automne.\n14h00 : Quand la température baisse, réfugiez-vous au 'Kusasenri Coffee Roastery' pour un latte ou au 'Musée du Volcan Aso'.", highlight: true },
+                    { time: "15:00", title: "巴士下山", fr: "Descente en Bus", desc: "在「草千里阿蘇火山博物館前」站牌，搭乘巴士返回 JR 阿蘇站。（※ 這是下午最關鍵的一班巴士，務必提早 5 分鐘去站牌等車）。", frDesc: "Prendre le bus à l'arrêt 'Kusasenri Aso Volcano Museum' pour retourner à la gare JR. (※ Bus l'après-midi très important, arrivez 5 min en avance à l'arrêt).", transport: "巴士 | Bus", color: "bg-wakatake" },
+                    { time: "15:30", title: "阿蘇站最後採買", fr: "Derniers achats à la gare d'Aso", desc: "回到車站後，如果還有想買的阿蘇乳製品、伴手禮，可以在車站的「くろ駅長室（小黑車站辦公室）」周邊做最後採買。", frDesc: "Derniers achats de produits laitiers ou souvenirs d'Aso autour du 'Bureau du Chef de Gare Kuro'." },
+                    { time: "16:11", title: "特急火車返回熊本", fr: "Retour en Train Express à Kumamoto", desc: "搭乘 特急「九州橫斷特急 3 號」 直達熊本站。", frDesc: "Prendre l'Express 'Kyushu Odan No.3' direct pour Kumamoto.", transport: "JR 特急 | Express JR", color: "bg-water" },
+                    { time: "17:15", title: "熊本車站晚餐", fr: "Dîner à la gare de Kumamoto", desc: "抵達熊本後享用晚餐。", frDesc: "Dîner après l'arrivée à Kumamoto." }
+                ]
+            },
+            "11/25 (三)": {
+                theme: "仙境高千穗 | Le Paradis de Takachiho",
+                notes: [],
+                events: [
+                    { time: "08:55", title: "飯店出發", fr: "Départ de l'hôtel", desc: "從 THE BLOSSOM KUMAMOTO 下樓，步行 1~2 分鐘至「JR 熊本站前 7 號巴士站牌」。", frDesc: "Descendre de l'hôtel, marcher 1-2 min jusqu'à 'l'arrêt de bus N°7 devant la gare JR de Kumamoto'." },
+                    { time: "09:11", title: "搭乘特急高千穗號", fr: "Prendre le Bus Express Takachiho", desc: "上車出示預約的電子車票。", frDesc: "Présenter le billet électronique réservé en montant.", transport: "高速巴士 | Bus Express", color: "bg-wakatake" },
+                    { time: "12:19", title: "抵達高千穗巴士中心", fr: "Arrivée au Centre de Bus de Takachiho", desc: "下車後直接步行前往小火車車站（舊高千穗站），步行約 10 分鐘（800 公尺）。", frDesc: "Marcher directement vers la gare du petit train (Ancienne gare de Takachiho), environ 10 min (800 m)." },
+                    { time: "12:30", title: "現場購買小火車車票", fr: "Achat billet de Petit Train sur place", desc: "購買 13:00 發車的班次（小火車無法網上預約）。買完票後，利用空檔在車站或附近 FamilyMart 購買輕食解決午餐。", frDesc: "Acheter le billet pour le départ de 13h00 (pas de réservation en ligne). Acheter un repas léger à la gare ou au FamilyMart à côté." },
+                    { time: "13:00", title: "搭乘天照鐵道小火車", fr: "Petit train de chemin de fer d'Amaterasu", desc: "體驗 30 分鐘的高空鐵橋觀光，俯瞰 105 公尺深的溪谷秋色。", frDesc: "Profitez de 30 min de tourisme sur le pont ferroviaire suspendu, surplombant les couleurs d'automne de la vallée à 105m de profondeur." },
+                    { time: "13:35", title: "搭計程車前往高千穗峽谷", fr: "Prendre un taxi pour les Gorges de Takachiho", desc: "火車下車後，請車站櫃檯幫忙叫計程車，直奔峽谷底部的乘船場（車程約 10 分鐘，車資約 1,200 日圓）。", frDesc: "Demander au guichet d'appeler un taxi pour descendre à l'embarcadère des gorges (10 min, env. 1 200 JPY).", transport: "計程車 | Taxi", color: "bg-coral" },
+                    { time: "14:30", title: "高千穗峽手划船體驗", fr: "Expérience en barque aux Gorges de Takachiho", desc: "💡【分流動線：依預約時間】\n首選 [14:30 划船]：13:45 抵達峽谷吃烤糰子、拍照。14:15 報到。14:30 享受 30 分鐘手划船。15:00 上岸漫步，然後叫車。\n備案 [15:00 划船]：13:45 在「千穗之家」吃流水麵。14:45 報到。15:00 划船。15:30 歸還裝備立刻叫車。", frDesc: "💡【Organisation selon réservation】\nChoix 1 [Barque 14h30] : 13h45 manger des boulettes, photos. 14h15 enregistrement. 14h30 barque (30 min). 15h00 promenade puis taxi.\nChoix 2 [Barque 15h00] : 13h45 Nouilles fluides à 'Chiho no Ie'. 14h45 enregistrement. 15h00 barque. 15h30 taxi direct.", highlight: true },
+                    { time: "15:50", title: "搭計程車返回巴士中心", fr: "Retour au Centre de Bus en Taxi", desc: "從峽谷搭計程車上山，預留時間防範小塞車。", frDesc: "Remonter en taxi depuis les gorges, prévoir du temps pour les bouchons." },
+                    { time: "16:05", title: "巴士站最後採購", fr: "Derniers achats à la station de bus", desc: "在觀光案內所購買日向夏柑橘點心等土產。", frDesc: "Acheter des pâtisseries aux agrumes Hyuganatsu à l'office du tourisme." },
+                    { time: "16:44", title: "搭乘回程巴士返回熊本", fr: "Bus de retour vers Kumamoto", desc: "坐上特急高千穗號回程班次。19:58 抵達 JR 熊本站前。", frDesc: "Prendre le Bus Express Takachiho. Arrivée à 19h58 devant la gare JR de Kumamoto.", transport: "高速巴士 | Bus Express", color: "bg-wakatake" }
+                ]
+            },
+            "11/26 (四)": {
+                theme: "熊本市區漫步 | Promenade en ville de Kumamoto",
+                notes: [
+                    { title: "【交通與預估車資 / Transports et Tarifs】", content: "全日依靠路面電車移動。熊本市電一日券 500 JPY。\n<span class='lang-fr'>Déplacements en tramway. Pass 1 jour Tramway de Kumamoto 500 JPY.</span>" },
+                    { title: "【貼心備忘錄 / Notes Pratiques】", content: "1. 交通神卡必備：用 iPhone 綁定的 Suica 嗶卡，或買一日券。\n2. 垃圾不落地：櫻之馬場小吃請在店門口吃完。\n3. 注意溫差：洋蔥式穿法，攜帶防風外套。\n<span class='lang-fr'>1. Suica sur iPhone ou Pass 1 jour.\n2. Ne pas manger en marchant : terminez vos snacks devant la boutique.\n3. Températures variables : multicouches et coupe-vent.</span>" }
+                ],
+                events: [
+                    { time: "09:00", title: "搭乘市電前往熊本城", fr: "Tramway vers le Château de Kumamoto", desc: "搭乘「熊本市電 A 系統」，在「熊本城‧市役所前」站下車。\n💡 內行報你知：先往「熊本市役所」大樓搭電梯到 14 樓展望室（免費），鳥瞰熊本城大天守閣絕佳隱藏機位！", frDesc: "Prendre le 'Tramway Système A' jusqu'à 'Kumamoto Castle / City Hall'.\n💡 Conseil d'initié : Allez au 14ème étage de la mairie (gratuit) pour une vue panoramique cachée sur le donjon du château !", transport: "市電 | Tramway", color: "bg-yamabuki" },
+                    { time: "09:30", title: "黑白雄城「熊本城」", fr: "Château Majestueux de Kumamoto", desc: "從南大手門進入城區。\n💡 11/26 期間限定：熊本城又稱「銀杏城」。11月下旬巨大百年銀杏樹會換上純金黃色，黑白莊嚴天守閣與金色銀杏交織是絕景！順著「特別見學通路」走上天守閣。", frDesc: "Entrer par la porte Minami Otemon.\n💡 Spécial fin novembre : Le château est aussi appelé 'Château Ginkgo'. Les arbres centenaires dorés contrastent avec le donjon noir et blanc, une vue incroyable ! Empruntez le 'passage d'observation spécial'.", highlight: true },
+                    { time: "12:00", title: "櫻之馬場 城彩苑（午餐）", fr: "Sakuranobaba Josaien (Déjeuner)", desc: "在復古商店街享用小吃：\n- 菅乃屋：馬肉漢堡排、櫻肉握壽司\n- 高田蒲鉾：必吃「沙拉竹輪」\n- 香梅庵：「陣太鼓」或「即席糰子」", frDesc: "Snacks dans la rue rétro :\n- Suganoya : Steak haché ou sushi de viande de cheval\n- Takata Kamaboko : Chikuwa à la salade de pommes de terre (frit)\n- Kobaian : Pâtisseries 'Jindaiko' ou 'Ikinari Dango'." },
+                    { time: "13:30", title: "搭市電前往水前寺", fr: "Tramway vers Suizenji", desc: "步行到市電「花畑町」站，搭至「水前寺公園」站下車。", frDesc: "Marcher jusqu'à la station 'Hanabatacho', prendre le tram jusqu'à 'Suizenji Park'.", transport: "市電 | Tramway", color: "bg-yamabuki" },
+                    { time: "14:00", title: "水前寺成趣園", fr: "Jardin Suizenji Jojuen", desc: "江戶造景美學，最吸睛的是修剪得像抹茶冰淇淋的「迷你富士山」。可以到古蹟「古今傳授之間」付費享用抹茶與和菓子。", frDesc: "Jardin esthétique de l'époque d'Edo. L'attraction principale est le 'Mini Mont Fuji' taillé comme une glace au matcha. Dégustez un matcha et des sucreries au bâtiment historique 'Kokin Denju no Ma'." },
+                    { time: "15:30", title: "傍晚與晚餐", fr: "Soirée et Dîner", desc: "返回最熱鬧的「通町筋」。晚餐推薦：黑亭拉麵 / 赤組拉麵 (靈魂焦香黑麻油)，或勝烈亭豬排 (新市街本店，全日本排名前幾名的炸豬排聖地！)。", frDesc: "Retour vers 'Torichosuji'. Recommandation Dîner : Ramen Kurotei / Ramen Akagumi (huile d'ail noir torréfiée), ou Tonkatsu Katsuretsutei (succursale Shinshigai, l'un des meilleurs porcs panés du Japon !)." }
+                ]
+            },
+            "11/27 (五)": {
+                theme: "前進福岡 | En route pour Fukuoka",
+                notes: [
+                    { title: "【交通與票券 / Transports et Billets】", content: "🌟 本日開始啟用「JR 北九州鐵路周遊券 5日券」。\n新幹線由周遊券涵蓋 ＋ 福岡地鐵單程 210 JPY。\n<span class='lang-fr'>🌟 Activation du 'JR Pass Kyushu Nord 5 jours'. Shinkansen couvert + Métro de Fukuoka 210 JPY l'aller simple.</span>" },
+                    { title: "【行前貼心小建議 / Conseils Pratiques】", content: "1. teamLab 門票預購。\n2. 往返福岡塔全程搭乘西鐵巴士最方便 (嗶 Suica)。\n3. 傍晚海風大，攜帶防風保暖外套與圍巾。\n<span class='lang-fr'>1. Réserver les billets teamLab en ligne.\n2. Bus Nishitetsu le plus pratique (utiliser Suica).\n3. Vent marin froid le soir, prévoir veste et écharpe.</span>" }
+                ],
+                events: [
+                    { time: "09:30", title: "新幹線（熊本 ➔ 博多）", fr: "Shinkansen (Kumamoto ➔ Hakata)", desc: "搭乘新幹線直達博多站（車程約 38 分鐘）。", frDesc: "Shinkansen direct pour la gare de Hakata (env. 38 min).", transport: "新幹線 | Shinkansen", color: "bg-water" },
+                    { time: "10:30", title: "飯店寄放行李", fr: "Dépôt des bagages à l'hôtel", desc: "步行 7 分鐘到三井花園飯店福岡衹園寄放行李。", frDesc: "Marche de 7 min pour déposer les bagages au Mitsui Garden Hotel Fukuoka Gion." },
+                    { time: "11:00", title: "博多車站商圈午餐", fr: "Déjeuner autour de la Gare de Hakata", desc: "推薦：KITTE B1「天婦羅黑田屋 (天ぷらのひらお)」或 10 樓「博多一双拉麵」。", frDesc: "Recommandé : 'Tempura Hirao' au B1 de KITTE ou 'Ramen Hakata Issou' au 10ème étage." },
+                    { time: "13:30", title: "搭乘快速巴士直達地行濱", fr: "Bus express direct pour Jigyohama", desc: "從博多車站前巴士站搭乘西鐵快速巴士，約 25 分鐘抵達「E・ZO FUKUOKA」。", frDesc: "Prendre le Bus Express Nishitetsu devant la gare, env. 25 min jusqu'à 'E-ZO FUKUOKA'.", transport: "巴士 | Bus", color: "bg-wakatake" },
+                    { time: "14:15", title: "超夢幻數位藝術 teamLab Forest", fr: "teamLab Forest Fukuoka", desc: "位於 5 樓。用手機互動捕捉夢幻的立體小動物！\n💡 Concierge 提示：部分展區地面高低不平且有鏡面，請務必穿著布鞋/球鞋（現場可租借）。", frDesc: "Situé au 5ème étage. Capturez des animaux 3D avec votre smartphone !\n💡 Conseil Concierge : Sol inégal et miroirs, portez impérativement des baskets (location possible sur place)." },
+                    { time: "16:15", title: "散步前往福岡塔", fr: "Marche vers la Tour de Fukuoka", desc: "從 teamLab 步行前往約 15 分鐘，沿著海濱街道散步。", frDesc: "Marche d'environ 15 min depuis teamLab le long de la côte." },
+                    { time: "16:45", title: "日本第一海濱塔：福岡塔", fr: "Tour de Fukuoka (Coucher du soleil & Vue de nuit)", desc: "17:15 左右日落。同時看到「夕陽染紅博多灣」與「市區華燈初上」的魔幻時刻。展望台內還有浪漫的「戀人聖地」。", frDesc: "Coucher du soleil vers 17h15. Profitez de l'heure magique avec le soleil rougeoyant sur la baie et les lumières de la ville qui s'allument. 'Sanctuaire des Amoureux' à l'intérieur.", highlight: true },
+                    { time: "18:15", title: "搭巴士直達博多運河城", fr: "Bus direct pour Canal City Hakata", desc: "搭乘巴士直接坐到「博多運河城前」或「中洲」下車。", frDesc: "Prendre le bus jusqu'à 'Canal City Hakata' ou 'Nakasu'.", transport: "巴士 | Bus", color: "bg-wakatake" },
+                    { time: "19:00", title: "博多運河城：聖誕限定水舞秀", fr: "Canal City : Shopping & Spectacle de Fontaines de Noël", desc: "必看重點：整點上映的「聖誕限定 3D 光雕投影水舞秀」！晚餐直接在 5 樓「拉麵競技場」大快朵頤。", frDesc: "Incontournable : Spectacle de fontaines avec projection 3D de Noël à chaque heure pile ! Dînez au 5ème étage au 'Ramen Stadium'.", highlight: true },
+                    { time: "21:30", title: "散步回飯店", fr: "Retour à l'hôtel à pied", desc: "走回飯店辦理入住休息。", frDesc: "Marche vers l'hôtel pour le check-in et le repos." }
+                ]
+            },
+            "11/28 (六)": {
+                theme: "柳川遊船與太宰府 | Barque à Yanagawa & Dazaifu",
+                notes: [
+                    { title: "【交通與票券 / Transports et Billets】", content: "這天不搭 JR，請在西鐵天神站購買「太宰府柳川暢遊套票」。地鐵來回約 420 JPY ＋ 套票 3,340 JPY ＝ 約 3,760 JPY。\n<span class='lang-fr'>Pas de JR ce jour. Achetez le 'Pass Dazaifu Yanagawa Sightseeing' à la gare Nishitetsu Tenjin. Métro 420 JPY + Pass 3 340 JPY = env. 3 760 JPY.</span>" }
+                ],
+                events: [
+                    { time: "08:30", title: "飯店出發至西鐵天神站", fr: "Départ pour la gare Nishitetsu Tenjin", desc: "搭乘地鐵七隈線直達「天神南站」。在西鐵天神站人工櫃台購買「太宰府柳川暢遊套票」。", frDesc: "Prendre le métro Ligne Nanakuma jusqu'à 'Tenjin-minami'. Achetez le Pass Dazaifu Yanagawa au guichet Nishitetsu.", transport: "地鐵 | Métro", color: "bg-yamabuki" },
+                    { time: "09:30", title: "西鐵特急電車前往柳川", fr: "Train Express Nishitetsu vers Yanagawa", desc: "搭乘 09:30 的西鐵特急，直達西鐵柳川站（車程 49 分鐘）。", frDesc: "Prendre l'Express Nishitetsu de 9h30 direct pour Yanagawa (49 min).", transport: "西鐵 | Nishitetsu", color: "bg-coral" },
+                    { time: "10:30", title: "柳川水鄉遊船（川下り）", fr: "Promenade en barque à Yanagawa", desc: "搭乘免費接駁車前往乘船場。體驗 60-70 分鐘傳統搖櫓船，搖櫓船夫會沿途吟唱民謠。", frDesc: "Navette gratuite vers l'embarcadère. Profitez de 60-70 min en barque traditionnelle avec le batelier chantant des chansons folkloriques." },
+                    { time: "11:45", title: "午餐：蒸籠鰻魚飯", fr: "Déjeuner : Anguille cuite à la vapeur (Seiro-mushi)", desc: "推薦 300 年老店「元祖本吉屋」或「若松屋」。熱騰騰吸飽醬汁的蒸籠鰻魚飯非常適合寒冷天氣。", frDesc: "Recommandé : Restaurant tricentenaire 'Ganso Motoyoshiya' ou 'Wakamatsuya'. L'anguille chaude et savoureuse est parfaite pour le froid.", highlight: true },
+                    { time: "13:15", title: "返回柳川站轉車", fr: "Retour à la gare et transfert", desc: "搭乘回程接駁車至柳川站，搭特急電車至「二日市站」轉乘太宰府線至「太宰府站」。", frDesc: "Navette retour à la gare. Train Express jusqu'à 'Futsukaichi' puis Ligne Dazaifu jusqu'à la gare de 'Dazaifu'." },
+                    { time: "14:15", title: "太宰府天滿宮、紅葉", fr: "Sanctuaire Dazaifu Tenmangu & Érables rouges", desc: "親眼見證藤本壯介設計的「漂浮森林」臨時本殿！賞楓秘境：後方「光明禪寺」或旁「浮殿」。參道必吃現烤梅枝餅與逛隈研吾設計的星巴克。", frDesc: "Voyez le sanctuaire temporaire 'Forêt Flottante' par Sou Fujimoto ! Spots érables : Temple Komyozen-ji ou 'Ukidono'. Sur l'avenue, mangez un Umegae-mochi chaud et visitez le Starbucks conçu par Kengo Kuma.", highlight: true },
+                    { time: "17:00", title: "返回福岡市區", fr: "Retour en ville de Fukuoka", desc: "搭乘電車返回西鐵福岡（天神）站。", frDesc: "Train de retour vers la gare Nishitetsu Fukuoka (Tenjin)." },
+                    { time: "18:00", title: "博多名物晚餐", fr: "Dîner : Spécialités de Hakata", desc: "推薦安排暖胃的「博多牛腸鍋（もつ鍋）」或「水炊雞肉鍋」。", frDesc: "Recommandé : Motsunabe (fondue de tripes de bœuf) ou Mizutaki (fondue de poulet) pour se réchauffer." }
+                ]
+            },
+            "11/29 (日)": {
+                theme: "復古門司港 | Mojiko Rétro",
+                notes: [
+                    { title: "【交通與票券 / Transports et Billets】", content: "持 JR 周遊券搭特急列車（音速號 Sonic）至小倉，轉普通車至門司港。（北九州周遊券不能搭博多-小倉的新幹線）。車資 0 JPY。\n<span class='lang-fr'>Prendre l'Express JR (Sonic) jusqu'à Kokura avec le Pass JR, puis train local vers Mojiko. (Le Pass ne couvre pas le Shinkansen Hakata-Kokura). Tarif 0 JPY.</span>" }
+                ],
+                events: [
+                    { time: "08:30", title: "出發：博多 ➔ 小倉", fr: "Départ : Hakata ➔ Kokura", desc: "搭乘 JR 特急 Sonic 號（音速號）直達 JR 小倉站（車程 50 分鐘）。", frDesc: "Prendre le JR Express Sonic direct pour Kokura (50 min).", transport: "JR 特急 | Express JR", color: "bg-water" },
+                    { time: "09:20", title: "魚町銀天街與老派喫茶", fr: "Galerie Uomachi & Café Rétro", desc: "散步在第一條拱廊商店街。在「喫茶館 潤」或「Brazil」享受阿公阿嬤一起的厚片吐司日式早餐。", frDesc: "Promenade dans la plus ancienne galerie marchande couverte. Prenez un petit-déjeuner japonais (toast épais et café) au 'Kissakan Jun' ou 'Brazil' avec les locaux." },
+                    { time: "10:45", title: "小倉城與市民假日市集", fr: "Château de Kokura & Marché du dimanche", desc: "深秋的護城河與勝山公園銀杏、楓葉正美。週日常有在地市民市集。", frDesc: "Les douves et le parc Katsuyama sont superbes en automne. Marché dominical local très vivant." },
+                    { time: "12:15", title: "移動：小倉 ➔ 門司港", fr: "Trajet : Kokura ➔ Mojiko", desc: "搭乘 JR 鹿兒島本線（普通車）至木造古蹟 JR 門司港站。", frDesc: "Prendre la ligne JR Kagoshima (local) jusqu'à la gare historique en bois de Mojiko.", transport: "JR 普通 | JR Local", color: "bg-water" },
+                    { time: "12:45", title: "午餐：溫馨燒咖哩", fr: "Déjeuner : Curry au Four (Yaki Curry)", desc: "避開排隊名店，多走 5 分鐘到老奶奶經營的「Koganemushi（こがねむし）」。牽絲起司與酥脆炸洋蔥充滿家庭溫馨感。", frDesc: "Évitez les files d'attente, marchez 5 min jusqu'à 'Koganemushi' tenu par une gentille grand-mère. Fromage filant et oignons frits, un vrai plat familial !" },
+                    { time: "14:00", title: "榮町銀天街老街散策", fr: "Promenade dans la rue rétro Sakaemachi", desc: "拍完紅磚樓後，走入充滿昭和暮色的「榮町銀天街」。吃老字號「梅月」霜淇淋或香蕉大福。", frDesc: "Après les bâtiments en briques, entrez dans la rue 'Sakaemachi Arcade' à l'ambiance Showa. Mangez une glace ou un daifuku à la banane chez 'Baigetsu'." },
+                    { time: "16:00", title: "提早回程：小倉 ➔ 博多", fr: "Retour Anticipé : Kokura ➔ Hakata", desc: "門司港回小倉後，無縫轉乘特急 Sonic 號回博多（抵達時天剛黑）。", frDesc: "Retournez à Kokura puis prenez directement le Sonic vers Hakata (arrivée à la tombée de la nuit).", transport: "JR 特急 | Express JR", color: "bg-water" },
+                    { time: "17:00", title: "博多購物黃金時間", fr: "Shopping Prime Time à Hakata", desc: "博多站共構商場 (AMU PLAZA / HANKYU) 或步行至博多運河城盡情購物。", frDesc: "Shopping dans les centres commerciaux de la gare (AMU PLAZA/HANKYU) ou à Canal City." },
+                    { time: "20:30", title: "晚餐與宵夜：博多靈魂美食", fr: "Dîner : Soul Food de Hakata", desc: "選擇 A：商場吃牛腸鍋 (おおやま) 或一双拉麵。\n選擇 B：中洲或那珂川沿岸體驗最 Local 的「屋台」文化 (烤雞肉串、一口餃子)。", frDesc: "Choix A : Motsunabe ou Ramen Issou au centre commercial.\nChoix B : Expérimentez la culture 'Yatai' (stands de rue) le long de la rivière Nakagawa (brochettes, gyozas)." }
+                ]
+            },
+            "11/30 (一)": {
+                theme: "療癒由布院 | Guérison à Yufuin",
+                notes: [
+                    { title: "【交通與票券 / Transports et Billets】", content: "持 JR 周遊券搭乘特急「由布院之森」。全車指定席，務必提早劃位。車資 0 JPY。\n<span class='lang-fr'>Train Express 'Yufuin no Mori' avec JR Pass. Toutes places réservées, réservez à l'avance. Tarif 0 JPY.</span>" },
+                    { title: "【行前筆記 / Notes】", content: "1. 穿著：金鱗湖畔風大偏冷，穿防風外套與好走的球鞋。\n2. 垃圾：街上無垃圾桶，吃完還給店家，勿邊走邊吃。\n<span class='lang-fr'>1. Tenue : Froid et venteux au lac, portez un coupe-vent et de bonnes chaussures.\n2. Déchets : Pas de poubelles, rendez-les aux vendeurs, ne mangez pas en marchant.</span>" }
+                ],
+                events: [
+                    { time: "09:17", title: "由布院之森 1 號", fr: "Yufuin no Mori No.1", desc: "從博多搭乘觀光列車直達由布院。\n💡 叮嚀：車上販賣部的「大豆冰淇淋」跟「柑橘果汁」是完美序曲。", frDesc: "Train touristique direct depuis Hakata.\n💡 Conseil : La glace au soja et le jus d'agrumes vendus à bord sont parfaits !", transport: "JR 特急 | Express JR", color: "bg-water", highlight: true },
+                    { time: "11:35", title: "直奔 B-Speak", fr: "Direction la Pâtisserie B-Speak", desc: "抵達 Y 字路口，碰運氣買原味蛋糕捲當下午點心。", frDesc: "À l'intersection en Y, essayez d'acheter leur célèbre gâteau roulé pour le goûter." },
+                    { time: "11:50", title: "湯之坪街道小吃", fr: "Snacks dans la Rue Yunotsubo", desc: "必買：由布院 Milch 熱半熟起司塔、金賞可樂餅。沿路逛史努比茶屋、吉卜力專賣店。", frDesc: "Incontournables : Tartelette au fromage chaud Milch, Croquette Médaille d'Or. Boutiques Snoopy et Ghibli." },
+                    { time: "12:45", title: "大啖豐後牛：由布まぶし 心", fr: "Déjeuner Bœuf Bungo : Yufu Mabushi Shin", desc: "到金鱗湖店登記。激推豐後牛釜飯三吃（原味、加柚子胡椒、茶泡飯），鍋巴是一絕！", frDesc: "Succursale du Lac Kinrin. Commandez le riz en pot au Bœuf Bungo (3 façons de manger : nature, yuzu kosho, bouillon façon chazuke) !", highlight: true },
+                    { time: "14:15", title: "絕美金鱗湖深秋散策", fr: "Promenade au Lac Kinrin en Automne", desc: "環湖步道極佳。繞到後方天祖神社拍攝水中鳥居，是最具靈氣的隱藏風景。", frDesc: "Superbe sentier autour du lac. Allez derrière au sanctuaire Tenso pour photographier le Torii dans l'eau, un paysage caché et spirituel." },
+                    { time: "14:45", title: "由布院花卉村 & 文創雜貨", fr: "Yufuin Floral Village & Boutiques", desc: "仿造英國科茲窩打造的魔女宅急便、笑笑羊萌系造景。到「鞠智 cucuchi」買銅鑼燒小憩。", frDesc: "Village recréant les Cotswolds anglais (décors Kiki la petite sorcière, Shaun le Mouton). Achetez des dorayakis chez 'cucuchi'." },
+                    { time: "16:30", title: "散步回車站", fr: "Retour à la gare", desc: "天色漸暗，店家打烊，帶著戰利品回車站。", frDesc: "La nuit tombe, les boutiques ferment, retour à la gare." },
+                    { time: "17:17", title: "由布院之森 4 號返回博多", fr: "Yufuin no Mori No.4 vers Hakata", desc: "19:28 抵達博多。晚餐推薦運河城吃一蘭拉麵或在地居酒屋。", frDesc: "Arrivée Hakata 19h28. Dîner recommandé : Ramen Ichiran à Canal City ou Izakaya local.", transport: "JR 特急 | Express JR", color: "bg-water" }
+                ]
+            },
+            "12/1 (二)": {
+                theme: "福岡市區特調 | Spécial Fukuoka City",
+                notes: [
+                    { title: "【市區內行必吃備忘錄 / Mémos Gastronomiques】", content: "1. 烏龍麵：博多是烏龍麵發源地！湯頭清甜、牛蒡天婦羅酥脆，適合當午餐（如大池嶋）。\n2. 水炊鍋：晚上微冷推薦「水炊地雞鍋」（如華味鳥、とり田），濃郁白雞湯喝下全身暖。\n<span class='lang-fr'>1. Udon : Hakata est le berceau de l'Udon ! Bouillon doux, tempura de bardane croquant (ex: Oikejima).\n2. Mizutaki : Froid le soir, on recommande la fondue de poulet Mizutaki (ex: Hanamidori, Toriden). Le bouillon blanc réchauffe le corps.</span>" }
+                ],
+                events: [
+                    { time: "08:30", title: "南藏院：世界最大青銅臥佛", fr: "Nanzoin : Le plus grand Bouddha couché", desc: "朝聖極具震撼力的世界最大青銅臥佛，感受莊嚴寧靜的早晨。交通：搭乘 JR 篠栗線至「城戶南藏院前站」。", frDesc: "Pèlerinage au plus grand Bouddha couché en bronze du monde, profitez d'une matinée solennelle et paisible. Transport : Ligne JR Sasaguri jusqu'à 'Kido Nanzoin-mae'.", transport: "JR", color: "bg-water", highlight: true },
+                    { time: "12:30", title: "櫛田神社 & 博多町家故鄉館", fr: "Sanctuaire Kushida et Musée Machiya de Hakata", desc: "福岡市民的信仰中心，觀看巨大的「博多祇園山笠」。對面故鄉館看博多織示範。", frDesc: "Centre de croyance de Fukuoka, voyez l'immense char 'Hakata Gion Yamakasa'. Au musée en face, démonstration de tissage Hakata-ori." },
+                    { time: "13:45", title: "樂水園日式庭園抹茶", fr: "Jardin Japonais Rakusuien (Matcha)", desc: "隱身在市區的日式池泉回遊式庭園。坐在塌塌米茶室裡享用道地日本抹茶與季節和菓子。", frDesc: "Jardin japonais caché en ville. Asseyez-vous sur un tatami pour déguster un matcha authentique et des wagashis saisonniers." },
+                    { time: "15:00", title: "天神地下街與百貨購物", fr: "Shopping à Tenjin (Souterrain & Grands Magasins)", desc: "19世紀歐洲鐵鑄風格地下街，買 RINGO 蘋果派、BAKE 起司塔。想買精品可去岩田屋或大丸百貨退稅。", frDesc: "Galerie souterraine style européen 19e siècle. Achetez la tarte aux pommes RINGO ou BAKE Cheese Tart. Pour le luxe/détaxe, allez à Iwataya ou Daimaru.", transport: "地鐵 | Métro", color: "bg-yamabuki" },
+                    { time: "17:30", title: "運河城聖誕點燈與晚餐", fr: "Canal City Hakata : Illuminations de Noël et Dîner", desc: "水舞廣場震撼的聖誕限定水舞光雕秀！晚餐可吃拉麵競技場，或去那珂川吃屋台。", frDesc: "Spectacle de fontaines et illuminations 3D de Noël époustouflant ! Dîner au Ramen Stadium ou aux Yatai près de la rivière Nakagawa.", highlight: true }
+                ]
+            },
+            "12/2 (三)": {
+                theme: "跨越山陽 | Traversée vers Sanyo",
+                notes: [
+                    { title: "【廣島燒村名店推薦 / Recommandations Okonomiyaki】", content: "1. 八昌 (2F)：殿堂級，餅皮酥脆，打雙黃蛋！\n2. 大丸堂 (4F)：藝人簽名聖地，大丸堂燒料超豐富。\n3. 厳島 (2F)：生蠔控天堂，鐵板乾煎生蠔大爆漿！\n<span class='lang-fr'>1. Hassho (2F) : Légendaire, pâte croustillante, œuf double !\n2. Daimarudo (4F) : Signatures de stars, Okonomiyaki très garni.\n3. Itsukushima (2F) : Paradis des huîtres, huîtres sautées sur plaque chauffante incroyables !</span>" }
+                ],
+                events: [
+                    { time: "10:00", title: "飯店悠閒退房", fr: "Check-out de l'hôtel", desc: "享用早餐後辦理退房，大行李寄放飯店櫃台。", frDesc: "Check-out après le petit-déjeuner, laissez les bagages à la réception." },
+                    { time: "11:00", title: "天神大名享用極致午餐", fr: "Déjeuner Ultime à Tenjin Daimyo", desc: "推薦：天神 PARCO 的「極味屋 (極味や)」鐵板和牛漢堡排（避開尖峰免排隊）。", frDesc: "Recommandé : Steak haché Wagyu sur plaque chauffante chez 'Kiwamiya' à Tenjin PARCO (moins de monde après 13h30)." },
+                    { time: "13:30", title: "白天版聖誕市集打卡", fr: "Marché de Noël de Jour (Tenjin)", desc: "到福岡市役所西側廣場拍白天版【天神聖誕市集】，隨後回飯店拿行李。", frDesc: "Photos au Marché de Noël de Tenjin sur la place ouest de la mairie, puis récupération des bagages." },
+                    { time: "15:15", title: "博多光之街聖誕市集", fr: "Marché de Noël de la Gare Hakata", desc: "買一杯「2026年度限定聖誕紀念馬克杯」熱紅酒/熱可可，把杯子帶回家收藏！", frDesc: "Achetez un vin chaud ou chocolat chaud dans le 'Mug de Noël 2026 en édition limitée' et gardez la tasse !", highlight: true },
+                    { time: "15:53", title: "山陽新幹線（博多 ➔ 廣島）", fr: "Shinkansen Sanyo (Hakata ➔ Hiroshima)", desc: "搭乘新幹線 (Nozomi 號或 Sakura 號)，車程僅 1 小時 8 分鐘。", frDesc: "Prendre le Shinkansen (Nozomi ou Sakura), trajet de seulement 1 heure et 8 minutes.", transport: "新幹線 | Shinkansen", color: "bg-water" },
+                    { time: "17:15", title: "抵達廣島入住飯店", fr: "Arrivée à Hiroshima & Check-in", desc: "轉乘路面電車至「紙屋町西」。入住廣島麗嘉皇家酒店 (RIHGA Royal)。", frDesc: "Tramway jusqu'à 'Kamiyacho-nishi'. Check-in au RIHGA Royal Hotel Hiroshima.", transport: "電車 | Tram", color: "bg-yamabuki" },
+                    { time: "18:15", title: "本通商店街冬夜漫步", fr: "Promenade d'hiver Rue Hondori", desc: "沿著有大拱頂的「本通商店街」一路往東逛街補貨。", frDesc: "Shopping vers l'est le long de l'arcade couverte de la 'Rue Hondori'." },
+                    { time: "19:00", title: "廣島燒村大快朵頤", fr: "Dîner au Village Okonomimura", desc: "直奔傳奇大樓 2~4 樓，吃滋滋作響的廣島燒與鐵板生蠔。(參考備註挑選攤位)", frDesc: "Montez aux 2-4ème étages de ce bâtiment mythique pour un Okonomiyaki grésillant et des huîtres (Voir notes pour les stands)." },
+                    { time: "20:30", title: "廣島夢幻燈節夜景", fr: "Hiroshima Dreamination", desc: "漫步在 140 萬顆 LED 組成的光之城堡與藍色發光海洋中。", frDesc: "Promenez-vous parmi 1,4 million de LED formant des châteaux de lumière et des océans bleus." }
+                ]
+            },
+            "12/3 (四)": {
+                theme: "皮克敏與大鳥居 | Pikmin & Grand Torii",
+                notes: [
+                    { title: "【不開車必看指南 / Guide sans Voiture】", content: "1. 櫻花巴士班次極少（僅10:09），強烈推薦來回宮島 SA 都搭計程車，省體力且順路！\n2. 16:30 走下沙灘摸鳥居會泥濘，穿防水防滑運動鞋。\n<span class='lang-fr'>1. Bus Sakura très rare (10h09 unique), taxi fortement recommandé pour aller au SA Miyajima, ça économise l'énergie !\n2. Plage boueuse à 16h30 vers le Torii, portez des baskets imperméables.</span>" }
+                ],
+                events: [
+                    { time: "09:00", title: "出發：鐵路移防廿日市", fr: "Départ : Train vers Hatsukaichi", desc: "從飯店到新白島站或廣島站，搭 JR 山陽本線至「JR 廿日市站」。", frDesc: "Prendre la ligne JR Sanyo depuis Shin-Hakushima ou Hiroshima jusqu'à la gare 'JR Hatsukaichi'.", transport: "JR", color: "bg-water" },
+                    { time: "09:45", title: "計程車直達皮克敏露台", fr: "Taxi direct pour Pikmin Terrace", desc: "強烈建議在 JR 廿日市站北口搭計程車直達宮島SA的行人入口（約 1,500 日圓/10分鐘）。（備案：搭10:09櫻花巴士）。", frDesc: "Recommandé : Taxi depuis la sortie nord direct à l'entrée piétonne de Miyajima SA (1 500 JPY/10min). (Plan B : Bus Sakura 10h09).", transport: "計程車 | Taxi", color: "bg-coral" },
+                    { time: "10:25", title: "朝聖：皮克敏露台", fr: "Pèlerinage : PIKMIN TERRACE", desc: "跟「拿紅葉饅頭的大皮克敏」拍照！在 5 倍大的商店搶購宮島限定吊飾。打開《Pikmin Bloom》刷金色花苗！", frDesc: "Photos avec le Pikmin géant tenant un Momiji Manju ! Achetez des goodies exclusifs Miyajima. Ouvrez 'Pikmin Bloom' pour des pousses dorées !", highlight: true },
+                    { time: "11:50", title: "計程車直達宮島口碼頭", fr: "Taxi direct pour le Quai de Miyajimaguchi", desc: "逛完後請服務台叫計程車直達渡輪碼頭（車程 15 分鐘，極順路）。", frDesc: "Demandez au guichet un taxi direct pour l'embarcadère du ferry (15 min, trajet idéal).", transport: "計程車 | Taxi", color: "bg-coral" },
+                    { time: "12:15", title: "搭乘 JR 渡輪「大鳥居航班」", fr: "Ferry JR 'Vol du Grand Torii'", desc: "💡 內行站位：請站在船隻前行方向的右側。渡輪會刻意大轉彎靠近大鳥居，讓你從海上一眼捕捉最經典的朱紅鳥居全景。", frDesc: "💡 Astuce : Tenez-vous sur le côté droit du bateau. Le ferry fera un grand virage près du Torii pour la meilleure vue depuis la mer !", transport: "渡輪 | Ferry", color: "bg-water" },
+                    { time: "12:45", title: "宮島商店街大啖生蠔", fr: "Huîtres à la rue Omotesando", desc: "穿過小鹿，午餐激推「牡蠣屋」現烤大生蠔，或「星鰻飯」。點心吃紅葉堂炸紅葉饅頭。", frDesc: "Passez les cerfs. Mangez des huîtres géantes grillées chez 'Kakiya' ou de l'anguille Anago. Dessert : Momiji Manju frit chez Momijido." },
+                    { time: "14:00", title: "滿潮：嚴島神社朱紅迴廊", fr: "Marée haute : Sanctuaire Itsukushima", desc: "最佳高潮位！海水灌滿神殿下方，嚴島神社與大鳥居宛如漂浮在海面上，靈氣逼人。", frDesc: "Marée haute parfaite ! Le sanctuaire et le Torii semblent flotter sur l'eau, une aura très spirituelle.", highlight: true },
+                    { time: "15:30", title: "千疊閣與星巴克海景", fr: "Senjokaku & Starbucks vue mer", desc: "散步到「千疊閣」吹風，或到星巴克二樓露台喝咖啡看海。", frDesc: "Promenade à 'Senjokaku' ou café au balcon du Starbucks avec vue sur la mer." },
+                    { time: "16:30", title: "退潮：步行走向大鳥居", fr: "Marée basse : Marche vers le Grand Torii", desc: "雙重奇景解鎖！海水退去沙灘裸露，直接走到大鳥居正下方仰望，體驗驚人震撼感！", frDesc: "Double merveille ! La mer se retire, marchez sur le sable directement sous le Torii géant, une sensation incroyable !", highlight: true },
+                    { time: "17:15", title: "落日返程", fr: "Retour au crépuscule", desc: "搭乘 17:15/17:30 渡輪返回宮島口，轉乘 JR 山陽本線回市區（約 25 分鐘）。", frDesc: "Ferry retour, puis train JR Sanyo pour revenir en ville (25 min).", transport: "JR", color: "bg-water" },
+                    { time: "18:00", title: "廣島市區晚餐", fr: "Dîner en ville à Hiroshima", desc: "回飯店放戰利品，在紙屋町或本通享用美味燒肉或居酒屋。", frDesc: "Déposez les achats, dînez (BBQ ou Izakaya) autour de Kamiyacho ou Hondori." }
+                ]
+            },
+            "12/4 (五)": {
+                theme: "尾道海港山城漫遊 | Flânerie à Onomichi",
+                notes: [
+                    { title: "【終章備忘錄 / Mémos Finaux】", content: "1. 步行體力：山坡階梯多、海風大，請維持「防滑球鞋＋保暖防風外套」。\n2. 新幹線：廣島往返尾道（三原轉）班次多，時間自由。直接用 Suica 嗶卡進出，新幹線區間補自由席券。\n<span class='lang-fr'>1. Énergie : Beaucoup d'escaliers et de vent, portez 'baskets antidérapantes + coupe-vent chaud'.\n2. Shinkansen : Nombreux trains Hiroshima-Onomichi (via Mihara). Utilisez Suica, payez le supplément Shinkansen non réservé.</span>" }
+                ],
+                events: [
+                    { time: "09:00", title: "新幹線快速移防", fr: "Trajet rapide en Shinkansen", desc: "從廣島站搭山陽新幹線抵達「三原站」，同站轉乘 JR 山陽本線，09:45 抵達「尾道站」。", frDesc: "Shinkansen de Hiroshima à 'Mihara', puis ligne locale jusqu'à la gare 'Onomichi' (arrivée 09h45).", transport: "新幹線+JR | Shinkansen+JR", color: "bg-water" },
+                    { time: "10:00", title: "千光寺山頂與文學之道", fr: "Parc Senkoji & Chemin de la Littérature", desc: "搭單程纜車登頂。360度鳥瞰瀨戶內海與水道。順著山坡步道（文學之道）往下走參拜千光寺。", frDesc: "Téléphérique aller simple. Vue à 360° sur la mer de Seto. Descendez par le Chemin de la Littérature pour visiter le temple Senkoji.", highlight: true },
+                    { time: "12:30", title: "貓之細道", fr: "Allée des Chats", desc: "順著隱密綠蔭階梯切入。悠閒尋找福石貓，與親人的尾道街貓互動，經過艮神社。", frDesc: "Entrez dans les escaliers cachés. Cherchez les pierres-chats porte-bonheur, jouez avec les chats errants amicaux, passez le sanctuaire Ushitora." },
+                    { time: "13:30", title: "午餐：正宗尾道拉麵", fr: "Déjeuner : Onomichi Ramen", desc: "下山回平地。海景第一排「拉麵 喰海」或老字號「丸星拉麵」。靈魂豬背脂醬油小魚乾高湯！", frDesc: "En bas. Vue mer chez 'Kuukai' ou ancien 'Maruboshi'. Bouillon incroyable sauce soja, anchois et graisse de porc !" },
+                    { time: "14:30", title: "ONOMICHI U2 與老街", fr: "ONOMICHI U2 & Rues Anciennes", desc: "舊海運倉庫改建的工業風設計空間喝咖啡。回程逛本通商店街打包「尾道布丁」。", frDesc: "Ancien entrepôt maritime au design industriel pour un café. Au retour, achetez un 'Pudding Onomichi' dans la rue commerçante." },
+                    { time: "16:47", title: "搭車回廣島", fr: "Retour à Hiroshima", desc: "尾道搭 JR 至三原轉新幹線，17:35 順利回到廣島站。", frDesc: "Train JR d'Onomichi à Mihara puis Shinkansen, arrivée à Hiroshima à 17h35.", transport: "JR+新幹線", color: "bg-water" },
+                    { time: "18:30", title: "頂級廣島和牛燒肉盛宴", fr: "Le Dîner Ultime : BBQ Wagyu de Hiroshima", desc: "最後一夜激推！\n- 「焼肉きんぐ」或在地單點燒肉：精緻單點，和牛入口即化。\n- 「長田屋」：本通口名店，滿滿肥美鮮生蠔廣島燒，絕不踩雷！", frDesc: "Recommandation ultime pour la dernière nuit !\n- 'Yakiniku King' ou BBQ local : Wagyu fondant.\n- 'Nagataya' : Célèbre pour son Okonomiyaki plein d'huîtres charnues, zéro erreur !", highlight: true }
+                ]
+            },
+            "12/5 (六)": {
+                theme: "完美句點 | La Fin Parfaite",
+                notes: [],
+                events: [
+                    { time: "07:30", title: "飯店早餐、退房", fr: "Petit-déjeuner & Check-out", desc: "辦理退房手續。確認皮克敏、由布院等所有戰利品都有塞進行李箱。", frDesc: "Check-out. Vérifiez que les goodies Pikmin, Yufuin, etc. sont bien dans les valises." },
+                    { time: "08:20", title: "步行前往廣島巴士中心", fr: "Marche vers le Centre de Bus", desc: "從飯店 1 樓走連通管道，3 分鐘即可抵達隔壁的搭乘月台。", frDesc: "Passez par le passage au RDC de l'hôtel, 3 min jusqu'aux quais de bus à côté." },
+                    { time: "08:35", title: "搭乘機場利木津巴士", fr: "Bus Limousine Aéroport", desc: "08:35 發車 ➔ 09:30 抵達廣島機場。\n💡 車資 1,500 日圓，上車直接用 iPhone 的 Suica 嗶卡感應。（不建議搭乘 09:15 備用班次防塞車）。", frDesc: "Départ 08h35 ➔ Arrivée 09h30.\n💡 1 500 JPY, payez avec Suica sur iPhone. (Le bus de 09h15 n'est pas conseillé à cause du trafic potentiel).", transport: "利木津巴士 | Bus Limousine", color: "bg-wakatake" },
+                    { time: "09:30", title: "機場報到與最後補貨", fr: "Enregistrement & Derniers Achats", desc: "航空公司櫃台報到。廣島機場二樓有很多土產店：把額度留給「八天堂」奶油麵包、「楓葉饅頭」、檸檬點心！", frDesc: "Enregistrement. Le 2ème étage regorge de boutiques : dépensez le reste pour le pain à la crème 'Hattendo', les Momiji Manju et les douceurs au citron !" },
+                    { time: "11:50", title: "登機 CI113 返回台灣", fr: "Embarquement CI113 vers Taïwan", desc: "帶著滿滿的回憶，順利起飛回家。", frDesc: "Décollage avec la tête pleine de souvenirs." }
+                ]
+            }
+        };
+
+        const days = Object.keys(itineraryData);
+        const tabContainer = document.getElementById('tab-container');
+        const contentContainer = document.getElementById('itinerary-content');
+
+        // 生成 Tabs
+        days.forEach(day => {
+            const btn = document.createElement('button');
+            btn.className = `tab-btn pic-border bg-washi pic-btn px-4 py-2 font-bold whitespace-nowrap snap-center text-lg`;
+            btn.dataset.date = day;
+            btn.innerHTML = day.split(' ')[0]; // 只顯示日期，隱藏星期讓 Tab 變短
+            tabContainer.appendChild(btn);
+        });
+
+        const tabBtns = document.querySelectorAll('.tab-btn');
+
+        function renderItinerary(dateKey) {
+            // 切換按鈕狀態
+            tabBtns.forEach(btn => {
+                btn.classList.remove('bg-yamabuki', 'pic-shadow');
+                btn.classList.add('bg-washi');
+                if (btn.dataset.date === dateKey) {
+                    btn.classList.add('bg-yamabuki', 'pic-shadow');
+                    btn.classList.remove('bg-washi');
+                    btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                }
+            });
+
+            // 清空並重置動畫
+            contentContainer.innerHTML = '';
+            contentContainer.classList.remove('animate-bounce-in');
+            void contentContainer.offsetWidth; // 強制重繪
+
+            const data = itineraryData[dateKey];
+            
+            // 渲染頂部主題
+            let html = `
+                <div class="text-center mb-6">
+                    <h4 class="text-2xl font-black text-coral">${dateKey.split(' ')[0]}</h4>
+                    <h5 class="text-lg font-bold">${data.theme.split(' | ')[0]}</h5>
+                    <p class="lang-fr text-sm justify-center">${data.theme.split(' | ')[1]}</p>
+                </div>
+            `;
+
+            // 渲染每日筆記
+            if (data.notes && data.notes.length > 0) {
+                html += `<div class="pic-border pic-shadow bg-washi p-4 mb-8 text-sm leading-relaxed">`;
+                data.notes.forEach(note => {
+                    html += `
+                        <div class="mb-3 last:mb-0">
+                            <span class="font-extrabold text-ink block">${note.title}</span>
+                            <div class="content-block mt-1 font-bold text-ink opacity-90">${note.content}</div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+            }
+
+            // 渲染時間軸
+            html += data.events.map(item => {
+                const bgClass = item.highlight ? 'bg-coral bg-opacity-20' : 'bg-washi';
+                const borderColor = item.highlight ? 'border-coral' : 'border-ink';
+                
+                const highlightBadge = item.highlight ? `
+                    <div class="mt-2 mb-2 inline-flex flex-col bg-coral text-washi px-2 py-1 rounded-md border-2 border-ink transform -rotate-2 shadow-[2px_2px_0px_#3E3A39]">
+                        <span class="text-xs font-bold leading-none">必去 ✨</span>
+                        <span class="lang-fr !mt-1 text-[10px] leading-none text-ink">Incontournable</span>
+                    </div>` : '';
+                
+                const transportTag = item.transport ? `
+                    <div class="inline-flex flex-col mt-3 pic-border-sm ${item.color} px-2 py-1 shadow-[2px_2px_0px_#3E3A39]">
+                        <span class="text-[11px] font-bold leading-none">${item.transport.split(' | ')[0]}</span>
+                        <span class="lang-fr !mt-1 text-[9px] leading-none">${item.transport.split(' | ')[1]}</span>
+                    </div>` : '';
+
+                return `
+                <div class="flex gap-4 relative timeline-item mb-8 z-10">
+                    <div class="timeline-line flex flex-col items-center mt-1 relative">
+                        <div class="w-14 h-14 rounded-full pic-border bg-yamabuki flex flex-col items-center justify-center font-bold shadow-[2px_2px_0px_#3E3A39] z-10 relative leading-none">
+                            <span class="text-base">${item.time.split(':')[0]}</span>
+                            <span class="text-xs">${item.time.split(':')[1]}</span>
+                        </div>
+                    </div>
+                    <div class="flex-1 pic-border ${borderColor} pic-shadow ${bgClass} p-4 mt-1 relative">
+                        <h4 class="font-extrabold text-lg leading-snug">${item.title}</h4>
+                        <p class="lang-fr text-sm font-bold mb-3 border-b-2 border-dashed border-ink pb-2 opacity-80">${item.fr}</p>
+                        
+                        <div class="content-block text-sm font-bold text-ink opacity-90">${item.desc}</div>
+                        <div class="content-block text-sm lang-fr text-ink">${item.frDesc}</div>
+                        
+                        ${highlightBadge}
+                        <br>
+                        ${transportTag}
+                    </div>
+                </div>
+                `;
+            }).join('');
+
+            contentContainer.innerHTML = `<div class="animate-bounce-in pt-2 pb-8">${html}</div>`;
+        }
+
+        // 綁定事件
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                renderItinerary(btn.dataset.date);
+            });
+        });
+
+        // 預設載入 11/23
+        renderItinerary("11/23 (一)");
+    </script>
+</body>
+</html>
